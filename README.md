@@ -4,6 +4,13 @@ cmake script to copy any executable or dll runtime dependencies at install using
 # required
 - working `python3`, `pip3`, `bash`, `grep`, `sed`. It's assumed you are working on msys2 or mingw where all are readily avaiable
 
+# add to your project
+```bash
+#cd deps
+git submodule add https://github.com/Denzy7/mingw-copylibs
+git submodule update --init --recursive --depth 1 mingw-copylibs
+```
+
 # usage
 ```cmake
 # include once somewhere in your root CMakeLists.txt
