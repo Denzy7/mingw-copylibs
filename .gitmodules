@@ -1,0 +1,3 @@
+[submodule "mingw-ldd"]
+	path = mingw-ldd
+	url = https://github.com/nurupo/mingw-ldd
