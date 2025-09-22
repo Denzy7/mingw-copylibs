@@ -1,5 +1,6 @@
 # mingw-copylibs
-cmake script to copy any executable or dll runtime dependencies at install using [mingw-ldd](https://github.com/nurupo/mingw-ldd)
+cmake script to copy any executable or dll runtime dependencies at install using [mingw-ldd](https://github.com/nurupo/mingw-ldd)  
+the [bash script](mingw_copylibs.sh) can also be executed directly
 
 # required
 - working `python3`, `pip3`, `bash`, `grep`, `sed`. It's assumed you are working on msys2 or mingw where all are readily avaiable

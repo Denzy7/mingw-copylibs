@@ -1,9 +1,15 @@
 #!/bin/bash
 set -e
-exe="$1"
-syspfx="$2"
-extradlldirs="$3"
-mingwldd="$4"
+
+if [[ $# -lt 1 ]]; then
+    echo "usage: $0 file.exe|file.dll|PE_FILE [dll-lookup-dirs]"
+    exit 1
+fi
+
+rootpath=$(dirname $(realpath $0))
+exe="$(realpath $1)"
+extradlldirs="${@:2} ."
+mingwldd="$rootpath/mingw-ldd/mingw_ldd/mingw_ldd.py"
 
 dir="$(echo "$exe" | sed 's:[/\\][^/\\]*$::')"
 
@@ -13,7 +19,12 @@ sedstr2="s/.*=> //g"
 
 venvdir=mingw_copylibs_venv
 
-echo "info: exe:$exe dir:$dir syspfx:$syspfx extradlldirs:$extradlldirs"
+if ! [[ -f "$exe" ]]; then
+    echo "cannot find file $exe"
+    exit 1
+fi
+
+echo "info: exe:$exe dir:$dir extradlldirs:$extradlldirs"
 
 python3 -m venv "$venvdir"
 if [[ -f ".\\$venvdir\\Scripts\\pip" ]]; then
@@ -25,7 +36,7 @@ elif [[ -f "./$venvdir/bin/pip" ]]; then
 fi
 "$pip" install pefile
 
-lddstr=$("$python" "$mingwldd" "$exe" --dll-lookup-dirs "$syspfx/bin" $extradlldirs)
+lddstr=$("$python" "$mingwldd" "$exe" --dll-lookup-dirs $extradlldirs)
 echo "${lddstr}"
 echo "${lddstr}" | grep -Evi "$grepstr" | sed "$sedstr" | sed "$sedstr2" | while read -r file; do
 if [[ -f "$file" ]]; then

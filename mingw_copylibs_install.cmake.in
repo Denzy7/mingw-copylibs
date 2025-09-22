@@ -21,13 +21,12 @@ string(JOIN " " extradlldirs_str ${validdlldirs})
 foreach(pfx ${CMAKE_SYSTEM_PREFIX_PATH})
     # assumes we have winpthread, may not be case but it's always there
     if(EXISTS "${pfx}/bin/libwinpthread-1.dll")
-        set(syspfx ${pfx})
+        set(syspfx "${pfx}/bin")
     endif()
 endforeach()
 
-message("${extradlldirs_str}")
 execute_process(
-    COMMAND bash "${mingw_copylibs_DIR}/mingw_copylibs.sh" "${installexe}" "${syspfx}" "${extradlldirs_str}" "${mingw_copylibs_DIR}/mingw-ldd/mingw_ldd/mingw_ldd.py"
+    COMMAND bash "${mingw_copylibs_DIR}/mingw_copylibs.sh" "${installexe}" "${syspfx} ${extradlldirs_str}"
     RESULT_VARIABLE result
     WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
 )
@@ -36,5 +35,3 @@ if(${result} EQUAL 0)
 else()
     message(FATAL_ERROR "mingw script failed with errorcode ${result}")
 endif()
-    
-
